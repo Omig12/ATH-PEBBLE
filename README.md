@@ -1,5 +1,6 @@
 Pebble.js code from HackPR2015
-    An ATH movil client for pebble. When finished would let you send money to your contacts that also have ath movil
+
+    -An ATH movil client for pebble. When finished would let you send money to your contacts that also have ath movil
     developed by:
       -Alejandro Salvador Vega Nogales
       -Israel Dilan
