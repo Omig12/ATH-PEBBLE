@@ -3,7 +3,7 @@
     "capabilities": [
         ""
     ],
-    "companyName": "metaconscium@gmail.com",
+    "companyName": "Los ñames",
     "longName": "HACKPR_ATHMjs",
     "projectType": "pebblejs",
     "resources": {
@@ -33,7 +33,13 @@
                 "menuIcon": true,
                 "name": "IMAGES_ATH_28_PNG",
                 "type": "png"
-            }
+            },
+            {
+                "file": "images/IMG.png"
+                "menuIcon": false,
+                "name": "PROMO",
+                "type": "png"
+            }    
         ]
     },
     "sdkVersion": "3",
