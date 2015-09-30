@@ -8,10 +8,10 @@ Pebble.js code from HackPR2015
       -José Montero
 
     -Issues:
-	- Code is not well organized/commented.
+	- Code organization can be improved and better commented.
 	- Using "Hard Coded phony users", need to implement a way to sign in/register. (probably from phone)
-	- UI is not very well implemented. Didn't manage to figure out how to call menus from another menu.
-(Probably need to rewrite the hierarchy of our UI elements??)
-	- Using options of x money amount to send. This could still be viable as ATH movil currently has no service charge.
+	- UI can be improved.
+	- Using preset amounts to send, would like to implement an acumulator, but this could still be viable as ATH movil currently has no service charge.
 	- Needs a way to check if the contact you choose to send money to has a an ath movil account.
+	- At the moment all API calls are commented. Need help parsing JSON and implementing API calls.
 	- A rewrite to C with a JS plugin could be considered (a lot of work) for better performance.
