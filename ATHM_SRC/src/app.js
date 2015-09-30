@@ -10,28 +10,45 @@
 // Neccesary Dependency for Haptic feedback
   var Vibe = require('ui/vibe');
 
+
+
+/* Things were probably missing! 
+
 // Necessary Dependency for Accelerometer feedback
 //  var Accel = require('ui/accel');
 
 // Neccesary Dependency for AJAX
 // var ajax = require('ajax');
 
-// Pebble.showSimpleNotificationOnPebble();
 
-/* Storage for some JSON responses */
 
-  var globalJSON = {
-    'authToken': 'evereverevereverevereverever',
-    'senderPhoneNum': '',
-    'recipientPhoneNum': '',
-    'amount': 0
-  }; // global JSON that will be updated with credentials to make the transfer  
+Pebble.showSimpleNotificationOnPebble();
+
+var obj = JSON.parse(text);
+
+*/
+
+
+
+/*
+
+|||||  JSON STUFF  ||||||
+
+// Storage for some JSON responses 
+
+  var globalJSON = JSON.parse([
+	{'authToken': 'evereverevereverevereverever'},
+	{'senderPhoneNum': ''},
+	{'recipientPhoneNum': ''},
+	{'amount': 0}
+  ]); // global JSON that will be updated with credentials to make the transfer    
+var usr ;
+var psswd;
+var body = JSON.parse([{'username': usr}, {'password': psswd}]);
   var loginResponse; //catches login JSON response from ATH movil server
-  var transferResponse; //catches transfer JSON response from ATH movil server
+  var transferResponse; //catches transfer JSON response from ATH movil server 
 
-
-
-/* JSON - Login ATH_M API */
+// JSON - Login ATH_M API 
 
   var login = function(usr, psswd){
       var request = new XMLHttpRequest();
@@ -46,26 +63,20 @@
           console.log('Body:', this.responseText);
         }
       };
-  
-      var body = {
-        'username': usr,
-        'password': psswd
-      };
-  
+
       request.send(JSON.stringify(body));
       
-      var serverResponse = request.responseText;
+      var serverResponse = JSON.parse(request.responseText);
       
       return serverResponse;
   }; //function to login to ATH movil database. two arguments: username and password. returns JSON response from server  
 
 
 
-/* JSON - Make Transfer ATH_M API */
+// JSON - Make Transfer ATH_M API 
 
-  var transfer = function(transferJSON) { 
+var	transfer = function(){  
     var request = new XMLHttpRequest();
-  
     request.open('POST', 'http://54.175.166.76:8080/api/makeTransfer');
   
     request.setRequestHeader('Content-Type', 'application/json');
@@ -78,15 +89,17 @@
       }
     };
   
-    request.send(JSON.stringify(globalJSON));
+	request.send(JSON.stringify(globalJSON));
     var transferResponse = request.responseText;
     return transferResponse; 
   
   }; //function to send transfer info to ATH movil server. returns JSON response from server
 
-/* Transfer history incomming ATH_M API */
 
-/* Draft! Still on the works!
+
+// Transfer history incomming ATH_M API
+
+ Draft! Still on the works!
 var history = new XMLHttpRequest();
 
 	history.open('POST', 'http://54.209.246.213:8080/api/transferHistory/inbound');
@@ -101,7 +114,35 @@ var history = new XMLHttpRequest();
 	};
 	history.send(JSON.stringify(body));
  };
+ 
+ 
+ // Transfer response feedback.
+
+var testMsg = new UI.Card (JSON.parse({title: transferResponse}));
+
+
+
+// Still under works! 
+
+// Ajax "use"
+var web = new UI.Card({
+	title:'Web: ',
+  subtitle:e.item.subtitle,
+  body: content
+});
+
+// when called detailCard.show();
+
+ajax({ url: 'http://api.theysaidso.com/qod.json', type: 'json' },
+  function(data) {
+    web.body(data.contents.quote);
+    web.title(data.contents.author);
+  }
+);
+
 */
+
+
 
 /* Main UI CARD */
 
@@ -126,10 +167,13 @@ var history = new XMLHttpRequest();
 
 
 /* Register for ATH_M UI Card */
-  var Register = new UI.Card({
+  
+var Register = new UI.Card({
    title: 'Register: ',
     body: 'Please use companion app to register your account. ',
   }); //user selection card
+
+
 
 /* Transaccion Selection UI Card */
 
@@ -203,26 +247,8 @@ var history = new XMLHttpRequest();
     }]
 });
 
-/* Still under works! 
-
-// Ajax "use"
-var web = new UI.Card({
-	title:'Web: ',
-  subtitle:e.item.subtitle,
-  body: content
-});
-
-// when called detailCard.show();
-
-ajax({ url: 'http://api.theysaidso.com/qod.json', type: 'json' },
-  function(data) {
-    web.body(data.contents.quote);
-    web.title(data.contents.author);
-  }
-);
-*/
-
-
+/* Details Card */
+var detailCard;
 
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \\
@@ -242,7 +268,7 @@ main.show(); //display main menu
 
 // Testing grounds
 
-// Temporarely displaying Trnafer List
+// Temporarely displaying Transfer List
 main.on('click', 'up', function(e) {
 	Register.show();
  }); //if up is pressed on main message is shown.
@@ -272,16 +298,16 @@ main.on('click', 'down', function(e) {
 // If Login then
 
 userCard.on('click', 'up', function(e) { 
-    loginResponse = login ('pebbleUser1', 'ath.rocks');
-	// globalJSON.senderPhoneNum = loginResponse.phoneNumber;
-    console.log(globalJSON.senderPhoneNum);
+    // loginResponse = login ('pebbleUser1', 'ath.rocks');
+	// globalJSON.senderPhoneNum = JSON.parse(loginResponse.phoneNumber);
+    // console.log(globalJSON.senderPhoneNum);
 	moneyCard.show();
   });
       
 userCard.on('click', 'down', function(e) { 
-    loginResponse = login ('PebbleUser2', 'password!');
-	// globalJSON.senderPhoneNum = loginResponse.phoneNumber;
-	console.log(globalJSON.senderPhoneNum);
+    // loginResponse = login ('PebbleUser2', 'password!');
+	// globalJSON.senderPhoneNum = JSON.parse(loginResponse.phoneNumber);
+	// console.log(globalJSON.senderPhoneNum);
     moneyCard.show();
   }); //logins into ATH movil with user 2 and shows transaction card options
 
@@ -306,30 +332,32 @@ ContactList.on('select', function(e) {
 //  globalJSON.recipientPhoneNum = ContactList[e.itemIndex].subtitle;
   TransferList.show();	
 });
-               
 
  //  Listener for amount selected
 	// Add a click listener for select button click
 	TransferList.on('select', function(event) {
-
-		// Show a card with clicked item details
-		var detailCard = new UI.Card({
-			title: "Enviar: " + money[event.itemIndex].title,
-			body: money[event.itemIndex].subtitle
-		});
 	
-	globalJSON.amount = detailCard.body ;	
-		console.log(globalJSON.amout);
+		// globalJSON.amount = detailCard.body ;	
+		// console.log(globalJSON.amount);
 		// Trigger a vibration
 		Vibe.vibrate('short');
 
-		// Show the new Card
-		detailCard.show();
+/* Transfer Details Card */
+	// Show a card with clicked item details
+	var detailCard = new UI.Card({
+		title: "Enviar: \n" + money[event.itemIndex].title,
+		body: money[event.itemIndex].subtitle
 		
-		detailCard.on('select', function(event) {
-			transferResponse = transfer(globalJSON);
-			var testMsg = new UI.Card ({title: transferResponse.status});
-			Pebble.showSimpleNotificationOnPebble('Amount', {gobalJSON: 'amount'});
-			testMsg.show();
-		});
+	});		
+		
+		// Show the new Card
+		detailCard.show();	
 	});
+
+// Details of transaction
+	detailCard.on('select', function(event) {
+		// transfer();
+		Vibe.vibrate('double');
+	});
+	
+	
